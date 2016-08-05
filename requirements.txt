@@ -1,11 +1,11 @@
-beepboop==0.1.1
+beepboop-0.1.2
 docutils==0.12
 lockfile==0.12.2
 python-daemon==2.1.1
 PyYAML==3.11
-requests==2.9.1
+requests==2.10.0
 six==1.10.0
-slackclient==1.0.0
-slacker==0.9.9
-websocket-client==0.35.0
+slackclient==1.0.1
+slacker==0.9.24
+websocket-client==0.37.0
 langdetect==1.0.6
