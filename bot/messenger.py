@@ -1,5 +1,6 @@
 import logging
 import random
+from urllib.parse import quote
 
 logger = logging.getLogger(__name__)
 
@@ -16,13 +17,23 @@ class Messenger(object):
         channel = self.clients.rtm.server.channels.find(channel_id)
         channel.send_message("{}".format(msg.encode('ascii', 'ignore')))
 
+    def write_translate(self, channel_id, text):
+        translate_url = "https://translate.google.com/#ro/en/" + quote(text)
+        prompts = [
+            "That\'s a good one! How about you try it <{{}|in English?>",
+            "Let's see what <{}Google Translate> has to say about that",
+            "Did you mean to say it <{}|in English>?",
+        ]
+        txt = random.choice(prompts).format(translate_url)
+        self.send_message(channel_id, txt)
+
     def write_help_message(self, channel_id):
         bot_uid = self.clients.bot_user_id()
         txt = '{}\n{}\n{}\n{}'.format(
-            "I'm your friendly Slack bot written in Python.  I'll *_respond_* to the following commands:",
+            "I'm your friendly :flag-ro: :oncoming_police_car: bot written in Python.  I'll *_respond_* to the following commands:",
+            "> `some text in :flag-ro:` - I'll teach you some English",
             "> `hi <@" + bot_uid + ">` - I'll respond with a randomized greeting mentioning your user. :wave:",
-            "> `<@" + bot_uid + "> joke` - I'll tell you one of my finest jokes, with a typing pause for effect. :laughing:",
-            "> `<@" + bot_uid + "> attachment` - I'll demo a post with an attachment using the Web API. :paperclip:")
+            "> `<@" + bot_uid + "> joke` - I'll tell you one of my finest jokes, with a typing pause for effect. :laughing:")
         self.send_message(channel_id, txt)
 
     def write_greeting(self, channel_id, user_id):
@@ -46,16 +57,3 @@ class Messenger(object):
     def write_error(self, channel_id, err_msg):
         txt = ":face_with_head_bandage: my maker didn't handle this error very well:\n>```{}```".format(err_msg)
         self.send_message(channel_id, txt)
-
-    def demo_attachment(self, channel_id):
-        txt = "Beep Beep Boop is a ridiculously simple hosting platform for your Slackbots."
-        attachment = {
-            "pretext": "We bring bots to life. :sunglasses: :thumbsup:",
-            "title": "Host, deploy and share your bot in seconds.",
-            "title_link": "https://beepboophq.com/",
-            "text": txt,
-            "fallback": txt,
-            "image_url": "https://storage.googleapis.com/beepboophq/_assets/bot-1.22f6fb.png",
-            "color": "#7CD197",
-        }
-        self.clients.web.chat.post_message(channel_id, txt, attachments=[attachment], as_user='true')

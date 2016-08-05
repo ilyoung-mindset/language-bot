@@ -1,7 +1,7 @@
 import json
 import logging
 import re
-import langdetect
+from langdetect import detect
 
 logger = logging.getLogger(__name__)
 
@@ -35,19 +35,19 @@ class RtmEventHandler(object):
 
     def _handle_message(self, event):
         # Filter out messages from the bot itself
-        if not self.clients.is_message_from_me(event['user']):
+        if self.clients.is_message_from_me(event['user']):
+            return
 
-            msg_txt = event['text']
-
-            if self.clients.is_bot_mention(msg_txt):
-                # e.g. user typed: "@pybot tell me a joke!"
-                if 'help' in msg_txt:
-                    self.msg_writer.write_help_message(event['channel'])
-                elif re.search('hi|hey|hello|howdy', msg_txt):
-                    self.msg_writer.write_greeting(event['channel'], event['user'])
-                elif 'joke' in msg_txt:
-                    self.msg_writer.write_joke(event['channel'])
-                elif 'attachment' in msg_txt:
-                    self.msg_writer.demo_attachment(event['channel'])
-                else:
-                    self.msg_writer.write_prompt(event['channel'])
+        msg_txt = event['text']
+        if detect(msg_txt) == 'ro':
+            self.msg_writer.write_translate(event['channel'], msg_txt)
+        elif self.clients.is_bot_mention(msg_txt):
+            # e.g. user typed: "@pybot tell me a joke!"
+            if 'help' in msg_txt:
+                self.msg_writer.write_help_message(event['channel'])
+            elif re.search('hi|hey|hello|howdy', msg_txt):
+                self.msg_writer.write_greeting(event['channel'], event['user'])
+            elif 'joke' in msg_txt:
+                self.msg_writer.write_joke(event['channel'])
+            else:
+                self.msg_writer.write_prompt(event['channel'])
