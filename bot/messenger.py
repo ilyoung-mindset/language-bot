@@ -1,6 +1,9 @@
 import logging
 import random
-from urllib.parse import quote
+try:
+    from urllib import quote
+except:
+    from urllib.parse import quote
 
 logger = logging.getLogger(__name__)
 
@@ -20,8 +23,8 @@ class Messenger(object):
     def write_translate(self, channel_id, text):
         translate_url = "https://translate.google.com/#ro/en/" + quote(text)
         prompts = [
-            "That\'s a good one! How about you try it <{{}|in English?>",
-            "Let's see what <{}Google Translate> has to say about that",
+            "That\'s a good one! How about you try it <{}|in English?>",
+            "Let's see what <{}|Google Translate> has to say about that",
             "Did you mean to say it <{}|in English>?",
         ]
         txt = random.choice(prompts).format(translate_url)
