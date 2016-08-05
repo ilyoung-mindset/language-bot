@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+import langdetect
 
 logger = logging.getLogger(__name__)
 
