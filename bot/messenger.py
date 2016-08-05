@@ -28,7 +28,7 @@ class Messenger(object):
             "Did you mean to say it <{}|in English>?",
         ]
         txt = random.choice(prompts).format(translate_url)
-        self.send_message(channel_id, txt)
+        self.clients.web.chat.post_message(channel_id, txt)
 
     def write_help_message(self, channel_id):
         bot_uid = self.clients.bot_user_id()
