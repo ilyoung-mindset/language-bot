@@ -25,7 +25,7 @@ class Messenger(object):
         prompts = [
             "That\'s a good one! How about you try it <{}|in English?>",
             "Let's see what <{}|Google Translate> has to say about that",
-            "Did you mean to say it <{}|in English>?",
+            "Did you mean to say it <{}|in English>?"
         ]
         txt = random.choice(prompts).format(translate_url)
         self.clients.web.chat.post_message(channel_id, txt)
