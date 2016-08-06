@@ -41,7 +41,7 @@ class RtmEventHandler(object):
 
         msg_txt = event.get('text', '')
         if len(msg_txt) > 5 and detect(msg_txt) == 'ro':
-            self.msg_writer.write_translate(event['channel'], msg_txt)
+            self.msg_writer.write_translate(event['channel'], user, msg_txt)
         elif self.clients.is_bot_mention(msg_txt):
             # e.g. user typed: "@pybot tell me a joke!"
             if 'help' in msg_txt:

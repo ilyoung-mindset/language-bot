@@ -1,5 +1,6 @@
 import logging
 import random
+from datetime import datetime, timedelta
 try:
     from urllib import quote
 except:
@@ -11,6 +12,7 @@ logger = logging.getLogger(__name__)
 class Messenger(object):
     def __init__(self, slack_clients):
         self.clients = slack_clients
+        self.last_time = {}
 
     def send_message(self, channel_id, msg):
         # in the case of Group and Private channels, RTM channel payload is a complex dictionary
@@ -20,7 +22,7 @@ class Messenger(object):
         channel = self.clients.rtm.server.channels.find(channel_id)
         channel.send_message("{}".format(msg.encode('ascii', 'ignore')))
 
-    def write_translate(self, channel_id, text):
+    def write_translate(self, channel_id, user_id, text):
         translate_url = "https://translate.google.com/#ro/en/" + quote(text)
         prompts = [
             "_That\'s a good one! How about you try it <{}|in English?>_",
@@ -28,9 +30,18 @@ class Messenger(object):
             "_Did you mean to say it <{}|in English>?_"
         ]
         txt = random.choice(prompts).format(translate_url)
+
+        key = "{}-{}".format(channel_id, user_id)
+        if key in self.last_time:
+            time = datetime.utcnow() - self.last_time[key]
+            if time < timedelta(minutes=1):
+                txt = ":rage1:_<https://www.youtube.com/watch?v=a0x6vIAtFcI|" \
+                    "English, motherfucker, do you speak it?>_"
+        self.last_time[key] = datetime.utcnow()
+
         self.clients.web.chat.post_message(
-            channel_id, txt, username="Language Police", as_user=True,
-            unfurl_links=False)
+            channel_id, txt, as_user=True, unfurl_links=False,
+            unfurl_media=True)
 
     def write_help_message(self, channel_id):
         bot_uid = self.clients.bot_user_id()
