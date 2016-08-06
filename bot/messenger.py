@@ -23,12 +23,14 @@ class Messenger(object):
     def write_translate(self, channel_id, text):
         translate_url = "https://translate.google.com/#ro/en/" + quote(text)
         prompts = [
-            "That\'s a good one! How about you try it <{}|in English?>",
-            "Let's see what <{}|Google Translate> has to say about that",
-            "Did you mean to say it <{}|in English>?"
+            "_That\'s a good one! How about you try it <{}|in English?>_",
+            "_Let's see what <{}|Google Translate> has to say about that_",
+            "_Did you mean to say it <{}|in English>?_"
         ]
         txt = random.choice(prompts).format(translate_url)
-        self.clients.web.chat.post_message(channel_id, txt)
+        self.clients.web.chat.post_message(
+            channel_id, txt, username="Language Police", as_user=True,
+            unfurl_links=False)
 
     def write_help_message(self, channel_id):
         bot_uid = self.clients.bot_user_id()

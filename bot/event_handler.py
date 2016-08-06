@@ -35,10 +35,11 @@ class RtmEventHandler(object):
 
     def _handle_message(self, event):
         # Filter out messages from the bot itself
-        if self.clients.is_message_from_me(event['user']):
+        user = event.get('user')
+        if not user and self.clients.is_message_from_me(user):
             return
 
-        msg_txt = event['text']
+        msg_txt = event.get('text', '')
         if len(msg_txt) > 5 and detect(msg_txt) == 'ro':
             self.msg_writer.write_translate(event['channel'], msg_txt)
         elif self.clients.is_bot_mention(msg_txt):
