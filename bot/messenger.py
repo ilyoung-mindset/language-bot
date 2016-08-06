@@ -37,7 +37,10 @@ class Messenger(object):
             if time < timedelta(minutes=1):
                 txt = ":rage1:_<https://www.youtube.com/watch?v=a0x6vIAtFcI|" \
                     "English, motherfucker, do you speak it?>_"
-        self.last_time[key] = datetime.utcnow()
+            else:
+                self.last_time[key] = datetime.utcnow()
+        else:
+            self.last_time[key] = datetime.utcnow()
 
         self.clients.web.chat.post_message(
             channel_id, txt, as_user=True, unfurl_links=False,
