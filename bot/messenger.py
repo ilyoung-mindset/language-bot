@@ -37,6 +37,7 @@ class Messenger(object):
             if time < timedelta(minutes=1):
                 txt = ":rage1:_<https://www.youtube.com/watch?v=a0x6vIAtFcI|" \
                     "English, motherfucker, do you speak it?>_"
+                del self.last_time[key]
             else:
                 self.last_time[key] = datetime.utcnow()
         else:
