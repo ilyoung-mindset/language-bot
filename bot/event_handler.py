@@ -1,7 +1,7 @@
 import json
 import logging
 import re
-from langdetect import detect, LangDetectException
+from langdetect import detect, lang_detect_exception
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ class RtmEventHandler(object):
                 self.msg_writer.write_translate(
                     event['channel'], user, msg_txt)
                 return
-        except LangDetectException as e:
+        except lang_detect_exception.LangDetectException as e:
             logger.warning(e)
 
         if self.clients.is_bot_mention(msg_txt):
