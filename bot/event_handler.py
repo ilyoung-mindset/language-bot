@@ -14,6 +14,7 @@ class RtmEventHandler(object):
     def handle(self, event):
 
         if 'type' in event:
+            logger.debug(event)
             self._handle_by_type(event['type'], event)
 
     def _handle_by_type(self, event_type, event):
@@ -36,7 +37,8 @@ class RtmEventHandler(object):
     def _handle_message(self, event):
         # Filter out messages from the bot itself
         user = event.get('user')
-        if not user and self.clients.is_message_from_me(user):
+        if (not user and self.clients.is_message_from_me(user) or
+                event.get('subtype')):
             return
 
         msg_txt = event.get('text', '')
