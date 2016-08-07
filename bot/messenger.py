@@ -49,11 +49,9 @@ class Messenger(object):
 
     def write_help_message(self, channel_id):
         bot_uid = self.clients.bot_user_id()
-        txt = '{}\n{}\n{}\n{}'.format(
+        txt = '{}\n{}'.format(
             "I'm your friendly :flag-ro: :oncoming_police_car: bot written in Python.  I'll *_respond_* to the following commands:",
-            "> `some text in :flag-ro:` - I'll teach you some English",
-            "> `hi <@" + bot_uid + ">` - I'll respond with a randomized greeting mentioning your user. :wave:",
-            "> `<@" + bot_uid + "> joke` - I'll tell you one of my finest jokes, with a typing pause for effect. :laughing:")
+            "> `some text in Romanian` - I'll teach you some English")
         self.send_message(channel_id, txt)
 
     def write_greeting(self, channel_id, user_id):
