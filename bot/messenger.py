@@ -23,7 +23,8 @@ class Messenger(object):
         channel.send_message("{}".format(msg.encode('ascii', 'ignore')))
 
     def write_translate(self, channel_id, user_id, text):
-        translate_url = "https://translate.google.com/#ro/en/" + quote(text)
+        translate_url = "https://translate.google.com/#ro/en/" + quote(
+            text.encode('utf8', 'ignore'))
         prompts = [
             "_That\'s a good one! How about you try it <{}|in English?>_",
             "_Let's see what <{}|Google Translate> has to say about that_",
